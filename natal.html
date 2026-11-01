@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Natal</title>
+<style>
+:root{--bg:#fff5f5;--fg:#1b3a2a;--sim:#2b8a3e;--nao:#c92a2a;--btn-fg:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f2a1d;--fg:#ffecec;--sim:#ff6b6b;--nao:#69db7c;--btn-fg:#0f2a1d}}
+:root[data-theme="dark"]{--bg:#0f2a1d;--fg:#ffecec;--sim:#ff6b6b;--nao:#69db7c;--btn-fg:#0f2a1d}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--fg);font-family:Georgia,'Times New Roman',serif;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden}
+main{padding:24px;max-width:520px;position:relative;z-index:1}
+.enfeite{font-size:72px;line-height:1}
+h1{font-size:clamp(26px,7vw,40px);margin:16px 0 28px;font-weight:700}
+.botoes{display:flex;gap:16px;justify-content:center;align-items:center}
+button{font:inherit;font-size:20px;padding:12px 28px;border:0;border-radius:999px;color:var(--btn-fg);cursor:pointer}
+#sim{background:var(--sim)}
+#nao{background:var(--nao)}
+#nao.solto{position:fixed}
+button:focus-visible{outline:3px solid var(--fg);outline-offset:3px}
+video{max-width:100%;border-radius:16px;margin-top:16px}
+.neve{position:fixed;top:-30px;pointer-events:none;animation:cair linear infinite;opacity:.8}
+@keyframes cair{to{transform:translateY(110vh)}}
+@media (prefers-reduced-motion:reduce){.neve{display:none}}
+</style>
+</head>
+<body>
+<main id="tela">
+  <div class="enfeite">🎄</div>
+  <h1>Está pronto comemorar o Natal?</h1>
+  <div class="botoes">
+    <button id="sim">🎅 Sim</button>
+    <button id="nao">❄️ Não</button>
+  </div>
+</main>
+<script>
+// Para adicionar um vídeo, coloque o arquivo na mesma pasta e escreva o nome aqui, ex.: 'video.mp4'
+const VIDEO='video.mp4';
+const sim=document.getElementById('sim'),nao=document.getElementById('nao'),tela=document.getElementById('tela');
+function fugir(e){
+  if(e&&e.preventDefault)e.preventDefault();
+  nao.classList.add('solto');
+  const m=10,w=nao.offsetWidth,h=nao.offsetHeight;
+  nao.style.left=(m+Math.random()*(innerWidth-w-2*m))+'px';
+  nao.style.top=(m+Math.random()*(innerHeight-h-2*m))+'px';
+}
+nao.addEventListener('mouseenter',fugir);
+nao.addEventListener('touchstart',fugir,{passive:false});
+nao.addEventListener('click',fugir);
+sim.addEventListener('click',()=>{
+  let html='<div class="enfeite">🎁</div><h1>Estamos quase lá! 🎄</h1>';
+  if(VIDEO)html+='<video src="'+VIDEO+'" controls autoplay playsinline></video>';
+  tela.innerHTML=html;
+  nao.remove();
+});
+for(let i=0;i<24;i++){
+  const f=document.createElement('div');
+  f.className='neve';f.textContent='❄';
+  f.style.left=Math.random()*100+'vw';
+  f.style.fontSize=(10+Math.random()*16)+'px';
+  f.style.animationDuration=(7+Math.random()*8)+'s';
+  f.style.animationDelay=(-Math.random()*12)+'s';
+  document.body.appendChild(f);
+}
+</script>
+</body>
+</html>
